@@ -1,9 +1,7 @@
 package academy.mischok.todoapp.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.core.AutoConfigureCache;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -67,5 +65,23 @@ class UserControllerTest {
                         .content(data)
                 )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreatedUserWithInvalidUsername() throws Exception {
+        final String data = """
+                {
+                    "username": "t",
+                    "email": "",
+                    "password": "Abc1234!"
+                }
+                """;
+
+        mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(data)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Username must be at least 3 characters long"));
     }
 }
