@@ -1,4 +1,4 @@
-package academy.mischok.todoapp.models;
+package academy.mischok.todoapp.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,11 +8,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    protected long id;
-    @Column(name = "userName")
+    protected Long id;
+    @Column(name = "user_name")
     protected String userName;
     @Column(name = "email")
     protected String email;

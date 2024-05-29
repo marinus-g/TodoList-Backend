@@ -84,4 +84,21 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Username must be at least 3 characters long"));
     }
+
+    @Test
+    void testCreateUserWithBlankUserName() throws Exception {
+        final String data = """
+                {
+                    "username": "",
+                    "email": "test@gmail.de",
+                    "password": "Abc1234!"
+                }
+                """;
+        mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(data)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Username must not be blank"));
+    }
 }

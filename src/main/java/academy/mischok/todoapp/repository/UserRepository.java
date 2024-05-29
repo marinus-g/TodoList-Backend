@@ -1,6 +1,6 @@
-package academy.mischok.todoapp.repositories;
+package academy.mischok.todoapp.repository;
 
-import academy.mischok.todoapp.models.UserEntity;
+import academy.mischok.todoapp.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
