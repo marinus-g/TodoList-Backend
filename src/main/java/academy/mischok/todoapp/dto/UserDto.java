@@ -13,4 +13,5 @@ public class UserDto {
     private String username;
     @Email(message = "Invalid email address")
     private String email;
+
 }

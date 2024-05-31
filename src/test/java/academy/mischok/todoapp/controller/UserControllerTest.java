@@ -59,16 +59,15 @@ class UserControllerTest extends BaseControllerTest {
                 {
                     "username": "täest",
                     "email": "test@gmail.com",
-                    "password": "abc"
+                    "password": "Abc1234!"
                 }
                 """;
         mockMvc.perform(post("/user")
-        .contentType(MediaType.APPLICATION_JSON)
-                .content(data)
-
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(data)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.username").value("Invalid Username"));
+                .andExpect(jsonPath("$").value("Username should only contains numeric and alphabetic characters"));
     }
 
     @Test
@@ -102,7 +101,7 @@ class UserControllerTest extends BaseControllerTest {
                         .content(data)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.username").value("Invalid Username"));
+                .andExpect(jsonPath("$").value("Username too short"));
     }
 
     @Test
@@ -119,7 +118,7 @@ class UserControllerTest extends BaseControllerTest {
                         .content(data)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.username").value("Invalid Username"));
+                .andExpect(jsonPath("$").value("Username too short"));
     }
 
     @Test

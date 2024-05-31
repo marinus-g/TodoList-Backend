@@ -1,6 +1,6 @@
 package academy.mischok.todoapp.dto;
 
-import academy.mischok.todoapp.validation.UsernameValidation;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 public class RegistrationDto {
 
-    @UsernameValidation
+    @Nullable
     private String username;
     @Email(message = "Invalid email address")
     private String email;

@@ -6,11 +6,14 @@ import academy.mischok.todoapp.dto.UserDto;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.repository.UserRepository;
 import academy.mischok.todoapp.service.UserService;
+import academy.mischok.todoapp.validation.UserNameValidation;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -70,5 +73,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         this.userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserNameValidation isValidUsername(String username) {
+        if (Objects.isNull(username)) {
+            return new UserNameValidation(false, "Username not present");
+        } else if (username.length() < 3) {
+            return new UserNameValidation(false, "Username too short");
+        }  else if (username.length() > 20) {
+            return new UserNameValidation(false, "Username too long");
+        } else if (!username.matches("^[a-zA-Z0-9]+$")) {
+            System.out.println("ERRORXD");
+            return new UserNameValidation(false,
+                    "Username should only contains numeric " +
+                            "and alphabetic characters");
+        }
+        return new UserNameValidation(true, null);
     }
 }

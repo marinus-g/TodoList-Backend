@@ -9,6 +9,7 @@ import academy.mischok.todoapp.repository.UserRepository;
 import academy.mischok.todoapp.service.AuthenticationService;
 import academy.mischok.todoapp.service.UserService;
 import academy.mischok.todoapp.service.impl.UserServiceImpl;
+import academy.mischok.todoapp.validation.UserNameValidation;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -38,13 +39,16 @@ public class UserController {
     )
     public ResponseEntity<?> createUser(@Valid  @RequestBody
                                                   final RegistrationDto dto) {
-        System.out.println("IM CONTROLLER");
+
+        UserNameValidation validation = userService.isValidUsername(dto.getUsername());
+        if (!validation.isValid()) {
+            return ResponseEntity.badRequest().body(validation.message());
+        }
+
         if (userService.existsByUsername(dto.getUsername())) {
-            System.out.println("User already exists");
             return ResponseEntity.badRequest().body("User already exists");
         }
         if (userService.existsByEmail(dto.getEmail())) {
-            System.out.println("Email already exists");
             return ResponseEntity.badRequest().body("Email already exists");
         }
         return
