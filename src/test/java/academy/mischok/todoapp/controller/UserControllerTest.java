@@ -54,6 +54,24 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    void testCreateUserWithInvalidCharacterInUsername() throws Exception {
+        final String data = """
+                {
+                    "username": "täest",
+                    "email": "test@gmail.com",
+                    "password": "abc"
+                }
+                """;
+        mockMvc.perform(post("/user")
+        .contentType(MediaType.APPLICATION_JSON)
+                .content(data)
+
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.username").value("Invalid Username"));
+    }
+
+    @Test
     void testCreatedUserWithInvalidPassword() throws Exception {
         final String data = """
                 {
@@ -84,7 +102,7 @@ class UserControllerTest extends BaseControllerTest {
                         .content(data)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.username").value("length must be between 3 and 50"));
+                .andExpect(jsonPath("$.username").value("Invalid Username"));
     }
 
     @Test
@@ -101,7 +119,7 @@ class UserControllerTest extends BaseControllerTest {
                         .content(data)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.username").value("length must be between 3 and 50"));
+                .andExpect(jsonPath("$.username").value("Invalid Username"));
     }
 
     @Test
@@ -113,14 +131,14 @@ class UserControllerTest extends BaseControllerTest {
                 }
                 """;
         final String cookie = Arrays.stream(mockMvc.perform(post("/user/authenticate")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(data)
-                )
-                .andExpect(status().isOk())
-                .andExpect(cookie().exists("token"))
-                .andReturn()
-                .getResponse()
-                .getCookies())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(data)
+                        )
+                        .andExpect(status().isOk())
+                        .andExpect(cookie().exists("token"))
+                        .andReturn()
+                        .getResponse()
+                        .getCookies())
                 .filter(c -> "token".equals(c.getName()))
                 .map(Cookie::getValue)
                 .findFirst().orElseThrow();
