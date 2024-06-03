@@ -10,7 +10,8 @@ public class UserDto {
 
     private Long id;
     @NotBlank
-    private String userName;
+    private String username;
     @Email(message = "Invalid email address")
     private String email;
+
 }
