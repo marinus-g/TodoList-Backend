@@ -21,12 +21,20 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectValidation isTitleValid(String title) {
-        return null;
+        if (title == null) {
+            return new ProjectValidation(false, "Title cannot be null");
+        } else if (title.isBlank()) {
+            return new ProjectValidation(false, "Title cannot be blank");
+        }
+        return new ProjectValidation(true, null);
     }
 
     @Override
     public Optional<ProjectDto> createProject(ProjectDto projectDto) {
-        return Optional.empty();
+´        return Optional.ofNullable(projectDto)
+                .map(projectEntityConverter::convertToEntity)
+                .map(projectRepository::save)
+                .map(projectEntityConverter::convertToDto);
     }
 
     @Override

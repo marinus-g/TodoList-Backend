@@ -9,7 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-
 public class ProjectEntity {
 
     @Id

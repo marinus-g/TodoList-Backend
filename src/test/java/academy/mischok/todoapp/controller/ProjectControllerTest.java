@@ -16,7 +16,7 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
 
         final String data = """
                 {
-                    "name": "Test Project",
+                    "title": "Test Project",
                     "description": "This is a test project"
                 }
                 """;
@@ -28,7 +28,7 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
                 )
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
-                .andExpect(header().string("Location", containsString("/projects/")));
+                .andExpect(header().string("Location", containsString("/project/")));
     }
 
     @Test
@@ -36,7 +36,7 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
 
         final String data = """
                 {
-                    "name": "",
+                    "title": "",
                     "description": "This is a test project"
                 }
                 """;
@@ -47,7 +47,7 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
                         .cookie(super.defaultCookie)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Name must not be empty"));
+                .andExpect(jsonPath("$").value("Title cannot be blank"));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
                         .cookie(super.defaultCookie)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Name must be present"));
+                .andExpect(jsonPath("$").value("Title cannot be null"));
     }
 
 
@@ -74,7 +74,7 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
 
         final String data = """
                 {
-                    "name": "Test Project"
+                    "title": "Test Project"
                 }
                 """;
 
@@ -84,7 +84,7 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
                         .cookie(super.defaultCookie)
                 )
                 .andExpect(header().exists("Location"))
-                .andExpect(header().string("Location", containsString("/projects/")));
+                .andExpect(header().string("Location", containsString("/project/")));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
 
         final String data = """
                 {
-                    "name": "Test Project",
+                    "title": "Test Project",
                     "description": ""
                 }
                 """;
@@ -103,6 +103,6 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
                         .cookie(super.defaultCookie)
                 )
                 .andExpect(header().exists("Location"))
-                .andExpect(header().string("Location", containsString("/projects/")));
+                .andExpect(header().string("Location", containsString("/project/")));
     }
 }

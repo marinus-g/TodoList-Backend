@@ -30,7 +30,7 @@ public class ProjectEntityConverter implements DtoConverter<ProjectDto, ProjectE
         return ProjectEntity.builder()
                 .title(projectDto.getTitle())
                 .description(projectDto.getDescription())
-                .owner(userRepository.findById(projectDto.getId()).orElseThrow(()
+                .owner(userRepository.findById(projectDto.getOwnerId()).orElseThrow(()
                         -> new IllegalArgumentException("User with id " + projectDto.getId() + " not found")))
                 .build();
     }

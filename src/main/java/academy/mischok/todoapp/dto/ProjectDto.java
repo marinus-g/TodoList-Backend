@@ -2,6 +2,7 @@ package academy.mischok.todoapp.dto;
 
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -15,11 +16,8 @@ import java.util.List;
 public class ProjectDto {
 
     private Long id;
-    @NotBlank
     private String title;
-    @NotBlank
     private String description;
-    @NotBlank
     private Long ownerId;
     private List<Long> todos;
 

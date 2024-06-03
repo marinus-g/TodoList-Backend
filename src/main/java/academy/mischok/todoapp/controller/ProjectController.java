@@ -35,18 +35,13 @@ public class ProjectController {
     public ResponseEntity<?> createProject(@AuthenticationPrincipal UserEntity userEntity,
                                            @Valid @RequestBody ProjectDto projectDto) {
         ProjectValidation validation = projectService.isTitleValid(projectDto.getTitle());
-        if (!validation.isValid(projectDto)) {
+        if (!validation.isValid()) {
             return ResponseEntity.badRequest().body(validation.message());
         }
-
-
-        if (projectRepository.existsById(projectDto.getId())) {
-            return ResponseEntity.badRequest().body("Project-ID already exists");
-        }
-
+        projectDto.setOwnerId(userEntity.getId());
         return this.projectService.createProject(projectDto)
-                .map(dto -> ResponseEntity.created(URI.create("/project/" + dto.getId()))
-                        .build()).orElse(ResponseEntity.noContent().build());
+                .map(dto -> ResponseEntity.created(URI.create("/project/" + dto.getId())).build())
+                .orElse(ResponseEntity.noContent().build());
 
     }
 
