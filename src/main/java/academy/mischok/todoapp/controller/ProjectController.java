@@ -44,7 +44,7 @@ public class ProjectController {
                 .orElse(ResponseEntity.noContent().build());
 
     }
-
+    @GetMapping
     public ResponseEntity<List<ProjectDto>> getAllProjects(@AuthenticationPrincipal UserEntity user) {
         return ResponseEntity.ok(projectService.findAllProject(user));
     }

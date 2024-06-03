@@ -31,7 +31,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Optional<ProjectDto> createProject(ProjectDto projectDto) {
-´        return Optional.ofNullable(projectDto)
+        return Optional.ofNullable(projectDto)
                 .map(projectEntityConverter::convertToEntity)
                 .map(projectRepository::save)
                 .map(projectEntityConverter::convertToDto);
