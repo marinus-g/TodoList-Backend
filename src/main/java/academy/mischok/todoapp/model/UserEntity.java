@@ -19,13 +19,15 @@ public class UserEntity implements UserDetails  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
-    protected Long id;
+    private Long id;
     @Column(name = "username")
-    protected String username;
+    private String username;
     @Column(name = "email")
-    protected String email;
+    private String email;
     @Column(name = "password")
-    protected String password;
+    private String password;
+    @OneToMany
+    private List<ProjectEntity> projects;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -47,7 +47,7 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
                         .cookie(super.defaultCookie)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").value("Name must not be empty"));
+                .andExpect(jsonPath("$").value("Name must not be empty"));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
                         .cookie(super.defaultCookie)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").value("Name must be present"));
+                .andExpect(jsonPath("$").value("Name must be present"));
     }
 
 
