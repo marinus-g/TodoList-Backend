@@ -20,7 +20,7 @@ public interface UserService {
 
     boolean existsByEmail(String email);
 
-    Optional<? extends UserEntity> findByLogin(String login);
+    Optional<UserEntity> findByLogin(String login);
 
     void deleteUser(Long id);
 

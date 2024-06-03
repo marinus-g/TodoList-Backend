@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<? extends UserEntity> findByLogin(String login) {
+    public Optional<UserEntity> findByLogin(String login) {
         return this.userRepository.findByLogin(login);
     }
 
@@ -84,7 +84,6 @@ public class UserServiceImpl implements UserService {
         }  else if (username.length() > 20) {
             return new UserNameValidation(false, "Username too long");
         } else if (!username.matches("^[a-zA-Z0-9]+$")) {
-            System.out.println("ERRORXD");
             return new UserNameValidation(false,
                     "Username should only contains numeric " +
                             "and alphabetic characters");
