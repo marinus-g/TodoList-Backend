@@ -36,7 +36,8 @@ public class UsernamePasswordAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        if ("/user/authenticate".equals(request.getPathInfo())
+        if (("/user/authenticate".equals(request.getServletPath())
+                || "/user/authenticate".equals(request.getPathInfo()))
                 && "POST".equals(request.getMethod())) {
             final LoginPasswordDto loginPasswordDto = MAPPER
                     .readValue(request.getInputStream(),
@@ -54,6 +55,8 @@ public class UsernamePasswordAuthFilter extends OncePerRequestFilter {
                     );
             if (authentication.getPrincipal() instanceof UserDetails userDetails) {
                 authenticationService.buildCookie(userDetails)
+                        .stream().peek(cookie -> System.out.println("Cookie: " + cookie))
+                        .findFirst()
                         .ifPresent(cookie -> response.addCookie(cookie)
                         );
             }

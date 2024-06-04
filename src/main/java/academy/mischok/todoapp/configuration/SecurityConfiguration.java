@@ -32,6 +32,7 @@ public class SecurityConfiguration {
                 .exceptionHandling(configurer
                         -> configurer
                         .authenticationEntryPoint(authenticationEntryPoint))
+                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(usernamePasswordAuthFilter, BasicAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
@@ -41,7 +42,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(registry -> {
                     registry
                             .requestMatchers(HttpMethod.POST, "/user").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/user/authenticate").permitAll()
+                            .requestMatchers("/error").permitAll()
+                           // .requestMatchers(HttpMethod.POST, "/user/authenticate").permitAll()
                             .anyRequest().authenticated();
                 });
         return http.build();

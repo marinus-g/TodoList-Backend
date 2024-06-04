@@ -37,9 +37,10 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<?> createUser(@Valid  @RequestBody
+    public ResponseEntity<?> createUser(@Valid @RequestBody
                                                   final RegistrationDto dto) {
 
+        System.out.println("IN CREATE USER POST");
         UserNameValidation validation = userService.isValidUsername(dto.getUsername());
         if (!validation.isValid()) {
             return ResponseEntity.badRequest().body(validation.message());
@@ -65,7 +66,14 @@ public class UserController {
     )
     public ResponseEntity<?> authenticateUser(HttpServletResponse response,
                                               @AuthenticationPrincipal UserEntity user) {
-         return ResponseEntity.ok().build();
+         return Optional.ofNullable(user)
+                .map(userEntity -> {
+                    final Cookie cookie = authenticationService.buildCookie(userEntity)
+                            .orElseThrow(() -> new RuntimeException("Cookie not created"));
+                    response.addCookie(cookie);
+                    return ResponseEntity.ok(userEntityConverter.convertToDto(userEntity));
+                })
+                .orElse(ResponseEntity.badRequest().build());
     }
 
     @GetMapping(
