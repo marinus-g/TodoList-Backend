@@ -9,10 +9,10 @@ import academy.mischok.todoapp.repository.ToDoRepository;
 import academy.mischok.todoapp.service.ToDoService;
 import academy.mischok.todoapp.validation.TodoValidation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.util.EnumUtils;
 
-import java.awt.image.ImageProducer;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,7 +23,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ToDoServiceImpl implements ToDoService {
-    private final String DATE_FORMAT = "dd-MM-yyyy";
+    private static final String DATE_FORMAT = "dd-MM-yyyy";
     private final ToDoRepository toDoRepository;
     private final ToDoEntityConverter
             toDoEntityConverter;
@@ -46,10 +46,7 @@ public class ToDoServiceImpl implements ToDoService {
         return this.toDoRepository.existsByTitle(title);
     }
 
-    @Override
-    public void deleteToDo(Long id) {
-        this.toDoRepository.deleteById(id);
-    }
+
 
     @Override
     public Optional<ToDoDto> createToDo(UserEntity user, ToDoDto dto) {
@@ -62,28 +59,16 @@ public class ToDoServiceImpl implements ToDoService {
                 .findFirst();
     }
 
-    public Optional<ToDoDto> deleteById(UserEntity user, ToDoDto toDoDto) {
-        return Optional.ofNullable(toDoDto)
-                .map(toDoEntityConverter::convertToEntity)
-                .stream()
-                .map(toDoRepository::delete)
-                .map(toDoEntityConverter::convertToDto);
+    @Override
+    public void deleteToDo(Long id){
+        if (toDoRepository.existsById(id)){
+            toDoRepository.deleteById(id);
+        }
     }
-
-    /*
-        todo = {
-                id: 1,
-                name: "Hallo"
-                }
-     */
-    // -> // --> GET /todo/1
-    // --> erstmal wirst du authentifiziert als user mit der id 2
-    // --> dann wird findByIdAndUser(userMitId2, 1) ausgeführt
 
     public Optional<ToDoDto> findByIdAndUser(UserEntity user, Long id) {
         return toDoRepository.findByIdAndUser(id, user)
                 .map(toDoEntityConverter::convertToDto);
-
     }
 
     @Override
