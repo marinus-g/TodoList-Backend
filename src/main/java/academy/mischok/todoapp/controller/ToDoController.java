@@ -1,20 +1,22 @@
 package academy.mischok.todoapp.controller;
 
+import academy.mischok.todoapp.converter.impl.ToDoEntityConverter;
 import academy.mischok.todoapp.dto.ToDoDto;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.service.ToDoService;
+import academy.mischok.todoapp.service.UserService;
 import academy.mischok.todoapp.validation.TodoValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/todo")
@@ -22,6 +24,8 @@ import java.net.URI;
 public class ToDoController {
 
     private final ToDoService toDoService;
+    private final UserService userService;
+    private final ToDoEntityConverter toDoEntityConverter;
 
     /*
 
@@ -41,7 +45,20 @@ public class ToDoController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             path = "/{id}"
     )
-    public ResponseEntity<ToDoDto> getTodo(@AuthenticationPrincipal UserEntity user, Long id) {
+
+
+    public ResponseEntity<ToDoDto> getTodoById(@PathVariable UserEntity user, Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
+        Long userId = userEntity.getId();
+
+        UserEntity user1 = userService.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+
+        Optional<ToDoDto> todoDto = toDoService.findAllToDosByUser(user);
+
+        return toDoService.findToDo(user, id);
         // return todoService.findTodo(user, id);
         //return ResponseEntity.ok(toDoEntityConverter.convertToDto(toDo));
     }
@@ -61,6 +78,6 @@ public class ToDoController {
             if (!todoValidation.isValid()) {
                 return ResponseEntity.badRequest().body(todoValidation.message());
             }
-        return toDoService.deleteToDo(toDoDto.getId());
+        return  ResponseEntity.ok(); //toDoService.deleteToDo(toDoDto.getId());
         }
     }

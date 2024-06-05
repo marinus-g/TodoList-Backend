@@ -8,6 +8,7 @@ import academy.mischok.todoapp.model.ToDoEntity;
 import academy.mischok.todoapp.model.UserEntity;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class ToDoEntityConverter implements DtoConverter<ToDoDto, ToDoEntity>,
         EntityConverter<ToDoEntity, ToDoDto> {

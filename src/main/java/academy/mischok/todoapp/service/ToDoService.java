@@ -5,6 +5,7 @@ import academy.mischok.todoapp.model.Status;
 import academy.mischok.todoapp.model.ToDoEntity;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.validation.TodoValidation;
+import org.springframework.http.ResponseEntity;
 
 import java.sql.Date;
 import java.util.List;
@@ -22,4 +23,6 @@ public interface ToDoService {
     TodoValidation isDateValid(Date date);
     TodoValidation isStatusValid(Status status);
     List<ToDoDto> findAllToDosByUser(UserEntity user);
+
+    ResponseEntity<ToDoDto> findToDo(UserEntity user, Long id);
 }

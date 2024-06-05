@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.util.EnumUtils;
 
+import java.awt.image.ImageProducer;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -65,8 +66,8 @@ public class ToDoServiceImpl implements ToDoService {
         return Optional.ofNullable(toDoDto)
                 .map(toDoEntityConverter::convertToEntity)
                 .stream()
-                .map(toDoRepository::delete ())
-                                        .map(toDoEntityConverter::convertToDto);
+                .map(toDoRepository::delete)
+                .map(toDoEntityConverter::convertToDto);
     }
 
     /*
@@ -82,6 +83,7 @@ public class ToDoServiceImpl implements ToDoService {
     public Optional<ToDoDto> findByIdAndUser(UserEntity user, Long id) {
         return toDoRepository.findByIdAndUser(id, user)
                 .map(toDoEntityConverter::convertToDto);
+
     }
 
     @Override
