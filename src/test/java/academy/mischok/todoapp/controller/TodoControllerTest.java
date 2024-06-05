@@ -17,7 +17,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                 {
                     "title": "test",
                     "description": "Bessere Tests machen."
-                    "start_date": "12-12-2020",
+                    "start_date": "13-12-2020",
                     "end_date": "14-12-2020",
                     "state": "todo"
                 }
@@ -97,7 +97,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                 {
                     "title": "test",
                     "description": "Bessere Tests machen."
-                    "start_date": "13-12-2020",
+                    "start_date": "14-12-2020",
                     "state": "todo"
                 }
                 """;

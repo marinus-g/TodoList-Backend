@@ -3,6 +3,7 @@ package academy.mischok.todoapp.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Getter
@@ -16,14 +17,17 @@ public class ToDoEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
     @Column(name = "title")
     private String title;
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
     @Column(name = "start_date")
-    private Timestamp startDate;
+    private Date startDate;
     @Column(name = "end_date")
-    private Timestamp endDate;
+    private Date endDate;
     @Enumerated
     @Column(name = "status")
     private Status status;

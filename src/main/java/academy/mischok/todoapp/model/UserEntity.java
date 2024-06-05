@@ -27,6 +27,9 @@ public class UserEntity implements UserDetails  {
     @Column(name = "password")
     protected String password;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ToDoEntity> todos;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
