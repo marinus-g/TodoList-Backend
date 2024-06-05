@@ -6,20 +6,26 @@ import academy.mischok.todoapp.dto.ToDoDto;
 import academy.mischok.todoapp.dto.UserDto;
 import academy.mischok.todoapp.model.ToDoEntity;
 import academy.mischok.todoapp.model.UserEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.sql.Date;
 
 
 @Component
+@RequiredArgsConstructor
 public class ToDoEntityConverter implements DtoConverter<ToDoDto, ToDoEntity>,
         EntityConverter<ToDoEntity, ToDoDto> {
+
+    private final DateConverter dateConverter;
     @Override
     public ToDoDto convertToDto(ToDoEntity toDoEntity) {
         return ToDoDto.builder()
                 .id(toDoEntity.getId())
                 .title(toDoEntity.getTitle())
                 .description(toDoEntity.getDescription())
-                .startDate(toDoEntity.getStartDate())
-                .endDate(toDoEntity.getEndDate())
+                .startDate(toDoEntity.getStartDate() == null ? null : toDoEntity.getStartDate().toString())
+                .endDate(toDoEntity.getEndDate() == null ? null : toDoEntity.getEndDate().toString())
                 .build();
 
     }
@@ -30,8 +36,8 @@ public class ToDoEntityConverter implements DtoConverter<ToDoDto, ToDoEntity>,
                 .id(toDoDto.getId())
                 .title(toDoDto.getTitle())
                 .description(toDoDto.getDescription())
-                .startDate(toDoDto.getStartDate())
-                .endDate(toDoDto.getEndDate())
+                .startDate(toDoDto.getStartDate() == null ? null : new Date(dateConverter.convertToEntity(toDoDto.getStartDate()).getTime()))
+                .endDate(toDoDto.getEndDate() == null ? null : new Date(dateConverter.convertToEntity(toDoDto.getEndDate()).getTime()))
                 .build();
     }
 }

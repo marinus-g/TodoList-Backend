@@ -1,10 +1,6 @@
 package academy.mischok.todoapp.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,15 +19,17 @@ public class UserEntity implements UserDetails  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
-    protected Long id;
+    private Long id;
     @Column(name = "username")
-    protected String username;
+    private String username;
     @Column(name = "email")
-    protected String email;
+    private String email;
     @Column(name = "password")
-    protected String password;
+    private String password;
+    @OneToMany
+    private List<ProjectEntity> projects;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ToDoEntity> todos;
 
     @Override

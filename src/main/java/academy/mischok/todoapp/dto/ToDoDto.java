@@ -1,6 +1,7 @@
 package academy.mischok.todoapp.dto;
 
 import academy.mischok.todoapp.model.Status;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +9,6 @@ import lombok.*;
 
 
 import java.sql.Date;
-import java.sql.Timestamp;
 
 @Data
 @Builder
@@ -17,11 +17,17 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ToDoDto {
+    @JsonProperty("id")
     private Long id;
     @NotBlank
+    @JsonProperty("title")
     private String title;
+    @JsonProperty("description")
     private String description;
-    private Date startDate;
-    private Date endDate;
-    private Status status;
+    @JsonProperty("start_date")
+    private String startDate;
+    @JsonProperty("end_date")
+    private String endDate;
+    @JsonProperty("status")
+    private String status;
 }

@@ -24,7 +24,6 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         final UserEntity user;
         final AtomicReference<String> tokenReference = new AtomicReference<>();
-        System.out.println("IM PROVIDER");
         if (authentication instanceof UsernamePasswordAuthenticationToken
                 usernamePasswordAuthenticationToken) {
             user = Optional.ofNullable(this.authenticationService.authenticateUser(
