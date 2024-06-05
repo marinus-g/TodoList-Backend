@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -21,9 +20,9 @@ public class ToDoEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
     @Column(name = "title")
-    private String title;
+    private java.lang.String title;
     @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
+    private java.lang.String description;
     @Column(name = "start_date")
     private Date startDate;
     @Column(name = "end_date")

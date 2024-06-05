@@ -16,10 +16,10 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "title": "test",
-                    "description": "Bessere Tests machen."
+                    "description": "Bessere Tests machen.",
                     "start_date": "13-12-2020",
                     "end_date": "14-12-2020",
-                    "state": "todo"
+                    "status": "TODO"
                 }
                 """;
         mockMvc.perform(post("/todo")
@@ -35,10 +35,10 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "title": "test",
-                    "description": "Bessere Tests machen."
+                    "description": "Bessere Tests machen.",
                     "start_date": "12-2020",
                     "end_date": "14-12-2020",
-                    "state": "todo"
+                    "status": "TODO"
                 }
                 """;
 
@@ -48,7 +48,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                         .content(data)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Invalid Start Date"));
+                .andExpect(jsonPath("$").value("Invalid Date"));
     }
 
     @Test
@@ -56,10 +56,10 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "title": "test",
-                    "description": "Bessere Tests machen."
+                    "description": "Bessere Tests machen.",
                     "start_date": "13-12-2020",
                     "end_date": "12-2020",
-                    "state": "todo"
+                    "status": "TODO"
                 }
                 """;
 
@@ -69,7 +69,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                         .content(data)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Invalid End Date"));
+                .andExpect(jsonPath("$").value("Invalid Date"));
     }
 
     @Test
@@ -77,9 +77,9 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "title": "test",
-                    "description": "Bessere Tests machen."
+                    "description": "Bessere Tests machen.",
                     "end_date": "14-12-2020",
-                    "state": "todo"
+                    "status": "TODO"
                 }
                 """;
 
@@ -88,7 +88,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(data)
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -96,9 +96,9 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "title": "test",
-                    "description": "Bessere Tests machen."
+                    "description": "Bessere Tests machen.",
                     "start_date": "14-12-2020",
-                    "state": "todo"
+                    "status": "TODO"
                 }
                 """;
 
@@ -107,7 +107,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(data)
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -115,8 +115,8 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "title": "test",
-                    "description": "Bessere Tests machen."
-                    "state": "todo"
+                    "description": "Bessere Tests machen.",
+                    "status": "TODO"
                 }
                 """;
 
@@ -125,7 +125,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(data)
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -133,10 +133,10 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "title": "test",
-                    "description": "Bessere Tests machen."
+                    "description": "Bessere Tests machen.",
                     "start_date": "13-12-2020",
                     "end_date": "14-12-2020",
-                    "state": "tod"
+                    "status": "asdf"
                 }
                 """;
 
@@ -156,7 +156,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                 {
                     "title": "test",
                     "description": "",
-                    "state": "todo"
+                    "status": "TODO"
                 }
                 """;
         mockMvc.perform(post("/todo")
@@ -174,7 +174,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                 {
                     "title": "",
                     "description": "Bessere Tests machen.",
-                    "state": "todo"
+                    "status": "TODO"
                 }
                 """;
         mockMvc.perform(post("/todo")
@@ -190,7 +190,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "description": "Bessere Tests machen.",
-                    "state": "todo"
+                    "status": "TODO"
                 }
                 """;
         mockMvc.perform(post("/todo")
@@ -207,7 +207,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "title": "test",
-                    "state": "todo"
+                    "status": "TODO"
                 }
                 """;
         mockMvc.perform(post("/todo")
@@ -225,7 +225,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                 {
                     "title": "t",
                     "description": "Bessere Tests machen.",
-                    "state": "todo"
+                    "status": "TODO"
                 }
                 """;
         mockMvc.perform(post("/todo")
@@ -243,7 +243,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                 {
                     "title": "test",
                     "description": "B",
-                    "state": "todo"
+                    "status": "TODO"
                 }
                 """;
         mockMvc.perform(post("/todo")

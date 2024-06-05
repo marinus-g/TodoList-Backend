@@ -20,7 +20,7 @@ public class UserEntityConverter implements DtoConverter<UserDto, UserEntity>,
                         .map(toDoEntity -> ToDoDto.builder()
                                 .id(toDoEntity.getId())
                                 .title(toDoEntity.getTitle())
-                                .status(toDoEntity.getStatus())
+                                .status(toDoEntity.getStatus().name())
                                 .build()).toList())
                 .build();
     }
