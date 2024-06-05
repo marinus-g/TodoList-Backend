@@ -89,6 +89,8 @@ public class ToDoServiceImpl implements ToDoService {
             return new TodoValidation(false, "Title cannot be null");
         } else if (title.isBlank()) {
             return new TodoValidation(false, "Title cannot be blank");
+        } else if(title.length()<3){
+            return new TodoValidation(false, "Title too short");
         }
         return new TodoValidation(true, null);
     }
@@ -97,6 +99,8 @@ public class ToDoServiceImpl implements ToDoService {
     public TodoValidation isDescriptionValid(java.lang.String description) {
         if (description == null || description.isBlank()) {
             return new TodoValidation(false, "Description should not be empty");
+        } else if(description.length()<3){
+            return new TodoValidation(false, "Description too short");
         }
         return new TodoValidation(true, null);
     }
