@@ -16,6 +16,7 @@ public interface ToDoService {
     boolean existsByTitle(java.lang.String title);
     void deleteToDo(Long id);
     Optional<ToDoDto> createToDo(UserEntity user, ToDoDto dto);
+    Optional<ToDoDto> updateToDo(UserEntity user, Long id, ToDoDto dto);
     TodoValidation isValidTodo(ToDoDto dto);
     TodoValidation isTitleValid(java.lang.String title);
     TodoValidation isDescriptionValid(java.lang.String description);

@@ -3,6 +3,7 @@ package academy.mischok.todoapp.service.impl;
 import academy.mischok.todoapp.converter.impl.DateConverter;
 import academy.mischok.todoapp.converter.impl.ToDoEntityConverter;
 import academy.mischok.todoapp.dto.ToDoDto;
+import academy.mischok.todoapp.model.Status;
 import academy.mischok.todoapp.model.ToDoEntity;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.repository.ToDoRepository;
@@ -61,9 +62,24 @@ public class ToDoServiceImpl implements ToDoService {
         }
     }
 
+    @Override
     public Optional<ToDoDto> findByIdAndUser(UserEntity user, Long id) {
         return toDoRepository.findByIdAndUser(id, user)
                 .map(toDoEntityConverter::convertToDto);
+    }
+
+    @Override
+    public Optional<ToDoDto> updateToDo(UserEntity user, Long id, ToDoDto dto) {
+      return toDoRepository.findByIdAndUser(id, user)
+              .map(selectedToDo -> {
+                  selectedToDo.setTitle(dto.getTitle());
+                  selectedToDo.setDescription(dto.getDescription());
+                  selectedToDo.setStartDate(java.sql.Date.valueOf(dto.getStartDate()));
+                  selectedToDo.setEndDate(java.sql.Date.valueOf(dto.getEndDate()));
+                  selectedToDo.setStatus(Status.valueOf(dto.getStatus()));
+                  return toDoRepository.save(selectedToDo);
+              })
+              .map(toDoEntityConverter::convertToDto);
     }
 
     @Override

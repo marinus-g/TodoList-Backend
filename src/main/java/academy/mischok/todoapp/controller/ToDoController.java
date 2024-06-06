@@ -41,19 +41,32 @@ public class ToDoController {
         return toDoService.createToDo(user, toDoDto)
                 .map(saved -> ResponseEntity.created(URI.create("/todo/" + saved.getId())).build())
                 .orElse(ResponseEntity.noContent().build());
-        }
-        public  ResponseEntity<?> deleteTodo(@AuthenticationPrincipal UserEntity user,
-                                                   @Valid @RequestBody ToDoDto toDoDto) {
-            final TodoValidation todoValidation = toDoService.isValidTodo(toDoDto);
-            if (!todoValidation.isValid()) {
-                return ResponseEntity.badRequest().body(todoValidation.message());
-            }
-            if (toDoService.existsByTitle(toDoDto.getTitle())){
-                toDoService.deleteToDo(toDoDto.getId());
-                return  ResponseEntity.ok().build();
-            }else {
-                return ResponseEntity.notFound().build();
-            }
+    }
 
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateTodo(@AuthenticationPrincipal UserEntity user,
+                                        @Valid @RequestBody ToDoDto toDoDto, Long id) {
+        final TodoValidation todoValidation = toDoService.isValidTodo(toDoDto);
+        if (!todoValidation.isValid()) {
+            return ResponseEntity.badRequest().body(todoValidation.message());
+        }
+        return toDoService.updateToDo(user, id, toDoDto)
+                .map(saved -> ResponseEntity.created(URI.create("/todo/" + saved.getId())).build())
+                .orElse(ResponseEntity.noContent().build());
+    }
+
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public  ResponseEntity<?> deleteTodo(@AuthenticationPrincipal UserEntity user,
+                                         @Valid @RequestBody ToDoDto toDoDto) {
+        final TodoValidation todoValidation = toDoService.isValidTodo(toDoDto);
+        if (!todoValidation.isValid()) {
+            return ResponseEntity.badRequest().body(todoValidation.message());
+        }
+        if (toDoService.existsByTitle(toDoDto.getTitle())){
+            toDoService.deleteToDo(toDoDto.getId());
+            return  ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.notFound().build();
         }
     }
+}
