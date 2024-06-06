@@ -255,4 +255,21 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").value("Description too short"));
     }
+    @Test
+    void testUpdatedToDo_Success() throws Exception {
+        final String data = """
+                {
+                    "title": "test",
+                    "description": "B",
+                    "status": "TODO"
+                }
+                """;
+        mockMvc.perform(post("/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(data)
+                        .cookie(super.defaultCookie)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").value("ToDo not succesfully updated"));
+    }
 }

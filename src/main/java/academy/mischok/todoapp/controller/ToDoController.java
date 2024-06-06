@@ -43,7 +43,7 @@ public class ToDoController {
                 .orElse(ResponseEntity.noContent().build());
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/update",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateTodo(@AuthenticationPrincipal UserEntity user,
                                         @Valid @RequestBody ToDoDto toDoDto, Long id) {
         final TodoValidation todoValidation = toDoService.isValidTodo(toDoDto);
