@@ -120,6 +120,7 @@ public class ToDoServiceImpl implements ToDoService {
         }
         return new TodoValidation(true, null);
     }
+
     @Override
     public TodoValidation isDateValid(String date) {
         if (Objects.isNull(date)) {
@@ -128,6 +129,7 @@ public class ToDoServiceImpl implements ToDoService {
         final Date dateObject = this.dateConverter.convertToEntity(date);
         return new TodoValidation(dateObject != null, dateObject == null ? "Invalid Date" : null);
     }
+
     @Override
     public TodoValidation isStatusValid(String status){
         if (status == null) {

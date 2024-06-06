@@ -3,14 +3,12 @@ package academy.mischok.todoapp.controller;
 
 import academy.mischok.todoapp.converter.impl.ProjectEntityConverter;
 import academy.mischok.todoapp.dto.ProjectDto;
-import academy.mischok.todoapp.model.ProjectEntity;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.repository.ProjectRepository;
 import academy.mischok.todoapp.service.ProjectService;
 import academy.mischok.todoapp.validation.ProjectValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
