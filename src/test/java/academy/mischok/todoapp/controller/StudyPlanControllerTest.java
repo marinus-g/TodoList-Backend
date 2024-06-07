@@ -6,8 +6,11 @@ import org.springframework.http.MediaType;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class StudyPlanControllerTest extends AuthenticatedBaseControllerTest {
 
@@ -29,5 +32,15 @@ public class StudyPlanControllerTest extends AuthenticatedBaseControllerTest {
                     "end_date": "24-04-2024",
                 }
                 """;
+        mockMvc.perform(post("/project")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(data)
+                        .cookie(super.defaultCookie)
+                )
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"))
+                .andExpect(header().string("Location", containsString("/studyplan/")));
+        mockMvc.perform(get("/studyplan").cookie(super.defaultCookie))
+                .andExpect(jsonPath("$", hasSize(length + 1)));
     }
 }
