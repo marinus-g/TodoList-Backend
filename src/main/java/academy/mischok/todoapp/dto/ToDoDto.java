@@ -20,7 +20,6 @@ import java.sql.Date;
 public class ToDoDto {
     @JsonProperty("id")
     private Long id;
-    @NotEmpty(message = "Title should not be empty")
     @JsonProperty("title")
     private String title;
     @JsonProperty("description")

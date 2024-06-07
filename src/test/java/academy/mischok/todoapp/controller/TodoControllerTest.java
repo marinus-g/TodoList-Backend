@@ -183,7 +183,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                         .cookie(super.defaultCookie)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.title").value("Title should not be empty"));
+                .andExpect(jsonPath("$").value("Title should not be empty"));
     }
 
     @Test
@@ -200,7 +200,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                         .cookie(super.defaultCookie)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.title").value("Title should not be empty"));
+                .andExpect(jsonPath("$").value("Title should not be empty"));
     }
 
     @Test
