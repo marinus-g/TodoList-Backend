@@ -1,12 +1,10 @@
 package academy.mischok.todoapp.service;
 
 import academy.mischok.todoapp.dto.ToDoDto;
-import academy.mischok.todoapp.model.Status;
 import academy.mischok.todoapp.model.ToDoEntity;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.validation.TodoValidation;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 

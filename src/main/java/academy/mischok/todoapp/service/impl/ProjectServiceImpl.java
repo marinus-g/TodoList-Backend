@@ -7,11 +7,11 @@ import academy.mischok.todoapp.repository.ProjectRepository;
 import academy.mischok.todoapp.service.ProjectService;
 import academy.mischok.todoapp.validation.ProjectValidation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {

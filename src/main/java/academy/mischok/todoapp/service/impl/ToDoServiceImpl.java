@@ -42,7 +42,6 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
 
-
     @Override
     public Optional<ToDoDto> createToDo(UserEntity user, ToDoDto dto) {
         return Optional.ofNullable(dto)
@@ -55,8 +54,8 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
     @Override
-    public void deleteToDo(Long id){
-        if (toDoRepository.existsById(id)){
+    public void deleteToDo(Long id) {
+        if (toDoRepository.existsById(id)) {
             toDoRepository.deleteById(id);
         }
     }
@@ -85,11 +84,9 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public TodoValidation isTitleValid(java.lang.String title) {
-        if (title == null) {
-            return new TodoValidation(false, "Title cannot be null");
-        } else if (title.isBlank()) {
-            return new TodoValidation(false, "Title cannot be blank");
-        } else if(title.length()<3){
+        if (title == null || title.isBlank()) {
+            return new TodoValidation(false, "Title should not be empty");
+        } else if (title.length() < 3) {
             return new TodoValidation(false, "Title too short");
         }
         return new TodoValidation(true, null);
@@ -99,11 +96,12 @@ public class ToDoServiceImpl implements ToDoService {
     public TodoValidation isDescriptionValid(java.lang.String description) {
         if (description == null || description.isBlank()) {
             return new TodoValidation(false, "Description should not be empty");
-        } else if(description.length()<3){
+        } else if (description.length() < 3) {
             return new TodoValidation(false, "Description too short");
         }
         return new TodoValidation(true, null);
     }
+
     @Override
     public TodoValidation isDateValid(String date) {
         if (Objects.isNull(date)) {
@@ -112,18 +110,19 @@ public class ToDoServiceImpl implements ToDoService {
         final Date dateObject = this.dateConverter.convertToEntity(date);
         return new TodoValidation(dateObject != null, dateObject == null ? "Invalid Date" : null);
     }
+
     @Override
-    public TodoValidation isStatusValid(String status){
+    public TodoValidation isStatusValid(String status) {
         if (status == null) {
             return new TodoValidation(false, "Status cannot be null");
         } else if (status.isBlank()) {
             return new TodoValidation(false, "Status cannot be blank");
         } else if (!status.equalsIgnoreCase("todo")
                 && !status.equalsIgnoreCase("doing")
-                && !status.equalsIgnoreCase("done")){
-            return new TodoValidation(false,"Invalid Status");
+                && !status.equalsIgnoreCase("done")) {
+            return new TodoValidation(false, "Invalid Status");
         }
-        return new TodoValidation(true,null);
+        return new TodoValidation(true, null);
 
     }
 

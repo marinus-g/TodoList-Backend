@@ -3,9 +3,7 @@ package academy.mischok.todoapp.converter.impl;
 import academy.mischok.todoapp.converter.DtoConverter;
 import academy.mischok.todoapp.converter.EntityConverter;
 import academy.mischok.todoapp.dto.ToDoDto;
-import academy.mischok.todoapp.dto.UserDto;
 import academy.mischok.todoapp.model.ToDoEntity;
-import academy.mischok.todoapp.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +16,7 @@ public class ToDoEntityConverter implements DtoConverter<ToDoDto, ToDoEntity>,
         EntityConverter<ToDoEntity, ToDoDto> {
 
     private final DateConverter dateConverter;
+
     @Override
     public ToDoDto convertToDto(ToDoEntity toDoEntity) {
         return ToDoDto.builder()

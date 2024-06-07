@@ -1,6 +1,5 @@
 package academy.mischok.todoapp.authentication.filter;
 
-import academy.mischok.todoapp.service.AuthenticationService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

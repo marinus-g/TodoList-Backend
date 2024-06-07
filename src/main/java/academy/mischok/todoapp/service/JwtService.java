@@ -3,7 +3,6 @@ package academy.mischok.todoapp.service;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
-import java.util.Optional;
 
 public interface JwtService {
 

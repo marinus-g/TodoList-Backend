@@ -1,10 +1,8 @@
 package academy.mischok.todoapp.service.impl;
 
-import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.util.Date;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

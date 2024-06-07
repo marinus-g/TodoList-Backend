@@ -1,15 +1,9 @@
 package academy.mischok.todoapp.dto;
 
-import academy.mischok.todoapp.model.Status;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.*;
-
-
-import java.sql.Date;
 
 @Data
 @Builder

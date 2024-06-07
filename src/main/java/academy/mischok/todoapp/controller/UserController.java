@@ -1,14 +1,12 @@
 package academy.mischok.todoapp.controller;
 
 import academy.mischok.todoapp.converter.impl.UserEntityConverter;
-import academy.mischok.todoapp.dto.LoginPasswordDto;
 import academy.mischok.todoapp.dto.RegistrationDto;
 import academy.mischok.todoapp.dto.UserDto;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.repository.UserRepository;
 import academy.mischok.todoapp.service.AuthenticationService;
 import academy.mischok.todoapp.service.UserService;
-import academy.mischok.todoapp.service.impl.UserServiceImpl;
 import academy.mischok.todoapp.validation.UserNameValidation;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +14,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +34,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<?> createUser(@Valid @RequestBody
-                                                  final RegistrationDto dto) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody final RegistrationDto dto) {
 
         System.out.println("IN CREATE USER POST");
         UserNameValidation validation = userService.isValidUsername(dto.getUsername());
@@ -66,7 +62,7 @@ public class UserController {
     )
     public ResponseEntity<?> authenticateUser(HttpServletResponse response,
                                               @AuthenticationPrincipal UserEntity user) {
-         return Optional.ofNullable(user)
+        return Optional.ofNullable(user)
                 .map(userEntity -> {
                     final Cookie cookie = authenticationService.buildCookie(userEntity)
                             .orElseThrow(() -> new RuntimeException("Cookie not created"));

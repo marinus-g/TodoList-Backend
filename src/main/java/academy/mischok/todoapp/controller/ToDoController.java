@@ -7,7 +7,6 @@ import academy.mischok.todoapp.service.UserService;
 import academy.mischok.todoapp.validation.TodoValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -57,7 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationService, UserDet
                 .filter(dto -> Objects.nonNull(dto.login()))
                 .flatMap(dto -> this.userService.findByLogin(dto.login()));
 
-        if (optional.isEmpty()){
+        if (optional.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
         return optional.filter(userEntity -> this.passwordEncoder.matches(
