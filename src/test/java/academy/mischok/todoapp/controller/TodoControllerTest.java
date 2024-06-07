@@ -251,7 +251,7 @@ public class TodoControllerTest extends AuthenticatedBaseControllerTest {
                         .content(data)
                         .cookie(super.defaultCookie)
                 )
-                .andExpect(status().isBadRequest())
+                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").value("Description too short"));
     }
 }

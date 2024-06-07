@@ -10,7 +10,6 @@ import academy.mischok.todoapp.service.ProjectService;
 import academy.mischok.todoapp.validation.ProjectValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,9 +43,32 @@ public class ProjectController {
                 .orElse(ResponseEntity.noContent().build());
 
     }
+
     @GetMapping
     public ResponseEntity<List<ProjectDto>> getAllProjects(@AuthenticationPrincipal UserEntity user) {
         return ResponseEntity.ok(projectService.findAllProject(user));
     }
 
+    @PutMapping("/{titel}")
+    public ResponseEntity<String> updateProject(@PathVariable String title, @RequestBody ProjectDto projectDto) {
+        boolean isUpdated = projectEntityConverter.updateProject(title, projectDto);
+        if (isUpdated) {
+            return ResponseEntity.ok("Project updated successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Project update failed.");
+        }
+    }
+
+    @DeleteMapping("/{title}")
+            public ResponseEntity<String> deleteProject(@PathVariable String title, @PathVariable Long id) {
+        ProjectEntity project = projectRepository.findById(id).orElse(null);
+
+        if (project != null) {
+            projectRepository.delete(project);
+
+            return ResponseEntity.ok("Project deleted successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Project not found.");
+        }
+    }
 }

@@ -31,4 +31,8 @@ public class ToDoEntity {
     @Column(name = "status")
     private Status status;
 
+    @ManyToOne
+    @JoinColumn(name = "project_entity_project_id")
+    private ProjectEntity projectEntity;
+
 }
