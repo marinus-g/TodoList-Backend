@@ -27,10 +27,8 @@ public class ProjectEntity {
     @ManyToOne
     private UserEntity owner;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @Builder.Default
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
     private List<ToDoEntity> todo = new ArrayList<>();
-
-    @OneToMany(mappedBy = "projectEntity", orphanRemoval = true)
-    private Set<ToDoEntity> toDoEntities = new LinkedHashSet<>();
 
 }

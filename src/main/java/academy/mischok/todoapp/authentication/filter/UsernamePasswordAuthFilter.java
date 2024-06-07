@@ -57,10 +57,11 @@ public class UsernamePasswordAuthFilter extends OncePerRequestFilter {
                 authenticationService.buildCookie(userDetails)
                         .stream().peek(cookie -> System.out.println("Cookie: " + cookie))
                         .findFirst()
-                        .ifPresent(cookie -> response.addCookie(cookie)
+                        .ifPresent(response::addCookie
                         );
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }

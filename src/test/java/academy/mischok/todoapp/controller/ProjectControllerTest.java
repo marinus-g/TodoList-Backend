@@ -1,29 +1,59 @@
 package academy.mischok.todoapp.controller;
 
+import academy.mischok.todoapp.converter.impl.ProjectEntityConverter;
 import academy.mischok.todoapp.dto.ProjectDto;
 import academy.mischok.todoapp.model.ProjectEntity;
+import academy.mischok.todoapp.repository.ProjectRepository;
 import academy.mischok.todoapp.service.impl.ProjectServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
 
+    @Mock
+    private ProjectEntityConverter projectEntityConverter;
+
+    @Mock
+    private ProjectRepository projectRepository;
+
+    @InjectMocks
+    private ProjectController projectController;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
     @Test
     void testCreateProject() throws Exception {
-
         final ObjectMapper objectMapper = new ObjectMapper();
         String contentAsString = mockMvc.perform(get("/project").cookie(super.defaultCookie).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
@@ -47,7 +77,7 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
 
 
         mockMvc.perform(get("/project").cookie(super.defaultCookie))
-                .andExpect(jsonPath("$", hasSize(length+1)));
+                .andExpect(jsonPath("$", hasSize(length + 1)));
     }
 
     @Test
@@ -123,5 +153,63 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
                 )
                 .andExpect(header().exists("Location"))
                 .andExpect(header().string("Location", containsString("/project/")));
+    }
+
+    @Test
+    void testUpdateProject() throws Exception {
+
+        final String data = """
+                {
+                    "title": "Test Project",
+                    "description": "This is a test project"
+                }
+                """;
+
+        final String location = mockMvc.perform(post("/project")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(data)
+                        .cookie(super.defaultCookie)
+                )
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"))
+                .andExpect(header().string("Location", containsString("/project/")))
+                .andReturn()
+                .getResponse().getHeader("Location");
+
+        assert location != null;
+        final String generatedProject = mockMvc.perform(get(location)
+                .cookie(super.defaultCookie))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        final ObjectMapper objectMapper = new ObjectMapper();
+        ProjectDto projectDto = objectMapper.readValue(generatedProject, ProjectDto.class);
+        projectDto.setTitle("Updated Title");
+        projectDto.setDescription("Updated Description");
+
+        mockMvc.perform(put(location)
+                .cookie(super.defaultCookie)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(projectDto)))
+                        .andExpect(status().isOk());
+    }
+
+    @Test
+    void testDeleteProject_Success() throws Exception {
+        ProjectEntity project = new ProjectEntity();
+        when(projectRepository.findById(anyLong())).thenReturn(Optional.of(project));
+        mockMvc.perform(delete("/1"))
+                .andExpect(status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.content().string("Project deleted successfully."));
+    }
+
+    @Test
+    void testDeleteProject_NotFound() throws Exception {
+        when(projectRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        mockMvc.perform(delete("/1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.content().string("Project not found."));
     }
 }

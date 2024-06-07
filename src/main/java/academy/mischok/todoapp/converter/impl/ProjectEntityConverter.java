@@ -39,17 +39,6 @@ public class ProjectEntityConverter implements DtoConverter<ProjectDto, ProjectE
                 .build();
     }
 
-    public boolean updateProject (String title, ProjectDto projectDto) {
-        Optional<ProjectEntity> projectEntity = userRepository.findById(projectDto.getOwnerId());
-        if (optionalProjectEntity.isPresent()) {
-            optionalProjectEntity.get();
-            projectEntity.setTitel(projectDto.getTitle());
-            projectEntity.setDescription(projectDto.getDescription());
+    // HALLO BURAK EIN CONVERTER KONVERTIERT NUR, LG
 
-            projectRepository.save(projectEntity);
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

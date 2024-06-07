@@ -2,12 +2,12 @@ package academy.mischok.todoapp.service.impl;
 
 import academy.mischok.todoapp.converter.impl.ProjectEntityConverter;
 import academy.mischok.todoapp.dto.ProjectDto;
+import academy.mischok.todoapp.model.ProjectEntity;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.repository.ProjectRepository;
 import academy.mischok.todoapp.service.ProjectService;
 import academy.mischok.todoapp.validation.ProjectValidation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,5 +43,20 @@ public class ProjectServiceImpl implements ProjectService {
                 .stream()
                 .map(projectEntityConverter::convertToDto)
                 .toList();
+    }
+
+    public Optional<ProjectDto> updateProject(Long id, ProjectDto projectDto) {
+        Optional<ProjectEntity> optionalProjectEntity = projectRepository.findById(id);
+        return optionalProjectEntity.map(projectEntity -> {
+            projectEntity.setTitle(projectDto.getTitle());
+            projectEntity.setDescription(projectDto.getDescription());
+            return projectRepository.save(projectEntity);
+        })
+                .map(projectEntityConverter::convertToDto);
+    }
+
+    @Override
+    public List<ProjectDto> findProject(UserEntity user) {
+        return List.of();
     }
 }
