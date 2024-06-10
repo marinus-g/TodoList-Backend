@@ -232,10 +232,11 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
 
     @Test
     void testDeleteProject_NotFound() throws Exception {
-        when(projectRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        mockMvc.perform(delete("/1"))
-                .andExpect(status().isBadRequest())
-                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.content().string("Project not found."));
+
+        mockMvc.perform(delete("/project/" +- 1)
+                        .cookie(super.defaultCookie))
+                .andExpect(status().isNotFound());
+
     }
 }

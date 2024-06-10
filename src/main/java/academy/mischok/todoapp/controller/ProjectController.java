@@ -52,7 +52,7 @@ public class ProjectController {
         try {
             return ResponseEntity.ok((ProjectDto) projectService.findProjectByIdAndUser(id, user));
         } catch (ProjectNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -71,9 +71,9 @@ public class ProjectController {
         if (project != null) {
             projectRepository.delete(project);
 
-            return ResponseEntity.ok("Project deleted successfully.");
+            return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.badRequest().body("Project not found.");
+            return ResponseEntity.notFound().build();
         }
     }
 }
