@@ -6,6 +6,7 @@ import academy.mischok.todoapp.model.ProjectEntity;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.repository.ProjectRepository;
 import academy.mischok.todoapp.service.ProjectService;
+import academy.mischok.todoapp.service.impl.ProjectNotFoundException;
 import academy.mischok.todoapp.validation.ProjectValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -47,8 +48,12 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectDto> getProject(@AuthenticationPrincipal UserEntity user, @PathVariable Long id) {
-        return ResponseEntity.ok((ProjectDto) projectService.findProject(user));
+    public ResponseEntity<?> getProject(@AuthenticationPrincipal UserEntity user, @PathVariable Long id) {
+        try {
+            return ResponseEntity.ok((ProjectDto) projectService.findProjectByIdAndUser(id, user));
+        } catch (ProjectNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")

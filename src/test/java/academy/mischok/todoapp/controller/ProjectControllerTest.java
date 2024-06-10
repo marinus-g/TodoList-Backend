@@ -196,12 +196,38 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
     }
 
     @Test
-    void testDeleteProject_Success() throws Exception {
-        ProjectEntity project = new ProjectEntity();
-        when(projectRepository.findById(anyLong())).thenReturn(Optional.of(project));
-        mockMvc.perform(delete("/1"))
-                .andExpect(status().isOk())
-                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.content().string("Project deleted successfully."));
+    void testDeleteProject() throws Exception {
+        final String data = """
+            {
+                "title": "Test Project",
+                "description": "This is a test project"
+            }
+            """;
+
+        final String location = mockMvc.perform(post("/project")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(data)
+                        .cookie(super.defaultCookie))
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"))
+                .andExpect(header().string("Location", containsString("/project/")))
+                .andReturn()
+                .getResponse()
+                .getHeader("Location");
+
+        assert location != null;
+
+        mockMvc.perform(get(location)
+                        .cookie(super.defaultCookie))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(delete(location)
+                        .cookie(super.defaultCookie))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get(location)
+                        .cookie(super.defaultCookie))
+                .andExpect(status().isNotFound());
     }
 
     @Test

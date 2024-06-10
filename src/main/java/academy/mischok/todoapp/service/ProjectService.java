@@ -2,6 +2,7 @@ package academy.mischok.todoapp.service;
 
 import academy.mischok.todoapp.dto.ProjectDto;
 import academy.mischok.todoapp.model.UserEntity;
+import academy.mischok.todoapp.service.impl.ProjectNotFoundException;
 import academy.mischok.todoapp.validation.ProjectValidation;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface ProjectService {
     List<ProjectDto> findAllProject(UserEntity user);
     List<ProjectDto> findProject(UserEntity user);
     Optional<ProjectDto> updateProject(Long id, ProjectDto projectDto);
+
+    ProjectDto findProjectByIdAndUser(Long id, UserEntity user) throws ProjectNotFoundException;
 }

@@ -10,6 +10,7 @@ import academy.mischok.todoapp.validation.ProjectValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -45,6 +46,11 @@ public class ProjectServiceImpl implements ProjectService {
                 .toList();
     }
 
+    @Override
+    public List<ProjectDto> findProject(UserEntity user) {
+        return List.of();
+    }
+
     public Optional<ProjectDto> updateProject(Long id, ProjectDto projectDto) {
         Optional<ProjectEntity> optionalProjectEntity = projectRepository.findById(id);
         return optionalProjectEntity.map(projectEntity -> {
@@ -55,8 +61,14 @@ public class ProjectServiceImpl implements ProjectService {
                 .map(projectEntityConverter::convertToDto);
     }
 
+
     @Override
-    public List<ProjectDto> findProject(UserEntity user) {
-        return List.of();
+    public ProjectDto findProjectByIdAndUser(Long id, UserEntity user) throws ProjectNotFoundException {
+        Optional<ProjectEntity> projectEntity = projectRepository.findByIdAndOwner(id, user);
+        if (projectEntity.isPresent()) {
+            return projectEntityConverter.convertToDto(projectEntity.get());
+        } else {
+            throw new ProjectNotFoundException("Project not found for the given id and user.");
+        }
     }
 }
