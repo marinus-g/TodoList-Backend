@@ -30,5 +30,6 @@ public class ProjectEntity {
     @Builder.Default
     @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
     private List<ToDoEntity> todo = new ArrayList<>();
+    private Set<UserEntity> users = new HashSet<>();
 
 }

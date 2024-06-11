@@ -64,6 +64,29 @@ public class ProjectController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    public ResponseEntity<?> addUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
+        try {
+            projectService.addUserToProject(projectId, userId);
+            return ResponseEntity.ok().build();
+        } catch (ProjectNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{projectId}/users/{userId}")
+    public ResponseEntity<?> removeUserFromProject(@PathVariable Long projectId, @PathVariable Long userId) {
+        try {
+            projectService.removeUserFromProject(projectId, userId);
+            return ResponseEntity.noContent().build();
+        } catch (ProjectNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}")
             public ResponseEntity<String> deleteProject(@PathVariable Long id) {
         ProjectEntity project = projectRepository.findById(id).orElse(null);
