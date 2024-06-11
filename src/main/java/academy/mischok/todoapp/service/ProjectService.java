@@ -14,4 +14,6 @@ public interface ProjectService {
     Optional<ProjectDto> createProject(ProjectDto projectDto);
 
     List<ProjectDto> findAllProject(UserEntity user);
+
+    List<ProjectDto> filterProjects(String title, UserEntity owner);
 }

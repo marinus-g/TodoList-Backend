@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
-
+    List<ProjectEntity> findByTitleContainingIgnoreCase(String title);
     List<ProjectEntity> findByOwner(UserEntity owner);
-
+    List<ProjectEntity> findByTitleContainingIgnoreCaseAndOwner(String title, UserEntity owner);
 }

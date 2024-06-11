@@ -2,6 +2,7 @@ package academy.mischok.todoapp.service.impl;
 
 import academy.mischok.todoapp.converter.impl.ProjectEntityConverter;
 import academy.mischok.todoapp.dto.ProjectDto;
+import academy.mischok.todoapp.model.ProjectEntity;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.repository.ProjectRepository;
 import academy.mischok.todoapp.service.ProjectService;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +45,23 @@ public class ProjectServiceImpl implements ProjectService {
                 .stream()
                 .map(projectEntityConverter::convertToDto)
                 .toList();
+    }
+
+    @Override
+    public List<ProjectDto> filterProjects(String title, UserEntity owner) {
+        List<ProjectEntity> projects;
+        if (title != null && owner != null) {
+            projects = projectRepository.findByTitleContainingIgnoreCaseAndOwner(title, owner);
+        } else if (title != null) {
+            projects = projectRepository.findByTitleContainingIgnoreCase(title);
+        } else if (owner != null) {
+            projects = projectRepository.findByOwner(owner);
+        } else {
+            projects = projectRepository.findAll();
+        }
+        List<ProjectDto> collect = projects.stream()
+                .map(projectEntityConverter::convertToDto)
+                .collect(Collectors.toList());
+        return collect;
     }
 }
