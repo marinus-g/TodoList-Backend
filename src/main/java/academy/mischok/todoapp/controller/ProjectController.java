@@ -48,4 +48,15 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.findAllProject(user));
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<List<ProjectDto>> filterProjects(@RequestParam(required = false) String title,
+                                                           @RequestParam(required = false) Long ownerId) {
+        UserEntity owner = null;
+        if (ownerId != null) {
+            owner = new UserEntity();
+            owner.setId(ownerId);  // Assuming you have a UserEntity with just an ID set
+        }
+        return ResponseEntity.ok(projectService.filterProjects(title, owner));
+    }
+
 }
