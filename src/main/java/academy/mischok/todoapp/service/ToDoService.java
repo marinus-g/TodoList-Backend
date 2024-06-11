@@ -13,6 +13,9 @@ import java.util.Optional;
 public interface ToDoService {
     List<ToDoDto> findAllToDos();
     Optional<ToDoEntity> findToDoByTitle(java.lang.String title);
+
+    Optional<ToDoEntity> findToDoByTitleAndUser(String title, UserEntity user);
+
     boolean existsByTitle(java.lang.String title);
     void deleteToDo(Long id);
     Optional<ToDoDto> createToDo(UserEntity user, ToDoDto dto);

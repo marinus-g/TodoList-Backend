@@ -25,23 +25,26 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public List<ToDoDto> findAllToDos() {
-        List<ToDoEntity> users = toDoRepository.findAll();
-        return users.stream()
+        List<ToDoEntity> todos = toDoRepository.findAll();
+        return todos.stream()
                 .map(toDoEntityConverter::convertToDto)
                 .toList();
     }
 
     @Override
-    public Optional<ToDoEntity> findToDoByTitle(java.lang.String title) {
+    public Optional<ToDoEntity> findToDoByTitle(String title) {
         return this.toDoRepository.findByTitle(title);
     }
 
     @Override
-    public boolean existsByTitle(java.lang.String title) {
-        return this.toDoRepository.existsByTitle(title);
+    public Optional<ToDoEntity> findToDoByTitleAndUser(String title, UserEntity user) {
+        return this.toDoRepository.findByTitleAndUser(title, user);
     }
 
-
+    @Override
+    public boolean existsByTitle(String title) {
+        return this.toDoRepository.existsByTitle(title);
+    }
 
     @Override
     public Optional<ToDoDto> createToDo(UserEntity user, ToDoDto dto) {
@@ -55,12 +58,13 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
     @Override
-    public void deleteToDo(Long id){
-        if (toDoRepository.existsById(id)){
+    public void deleteToDo(Long id) {
+        if (toDoRepository.existsById(id)) {
             toDoRepository.deleteById(id);
         }
     }
 
+    @Override
     public Optional<ToDoDto> findByIdAndUser(UserEntity user, Long id) {
         return toDoRepository.findByIdAndUser(id, user)
                 .map(toDoEntityConverter::convertToDto);
@@ -84,7 +88,7 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
     @Override
-    public TodoValidation isTitleValid(java.lang.String title) {
+    public TodoValidation isTitleValid(String title) {
         if (title == null) {
             return new TodoValidation(false, "Title cannot be null");
         } else if (title.isBlank()) {
@@ -94,12 +98,13 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
     @Override
-    public TodoValidation isDescriptionValid(java.lang.String description) {
+    public TodoValidation isDescriptionValid(String description) {
         if (description == null || description.isBlank()) {
             return new TodoValidation(false, "Description should not be empty");
         }
         return new TodoValidation(true, null);
     }
+
     @Override
     public TodoValidation isDateValid(String date) {
         if (Objects.isNull(date)) {
@@ -108,19 +113,19 @@ public class ToDoServiceImpl implements ToDoService {
         final Date dateObject = this.dateConverter.convertToEntity(date);
         return new TodoValidation(dateObject != null, dateObject == null ? "Invalid Date" : null);
     }
+
     @Override
-    public TodoValidation isStatusValid(String status){
+    public TodoValidation isStatusValid(String status) {
         if (status == null) {
             return new TodoValidation(false, "Status cannot be null");
         } else if (status.isBlank()) {
             return new TodoValidation(false, "Status cannot be blank");
         } else if (!status.equalsIgnoreCase("todo")
                 && !status.equalsIgnoreCase("doing")
-                && !status.equalsIgnoreCase("done")){
+                && !status.equalsIgnoreCase("done")) {
             return new TodoValidation(false,"Invalid Status");
         }
         return new TodoValidation(true,null);
-
     }
 
     @Override

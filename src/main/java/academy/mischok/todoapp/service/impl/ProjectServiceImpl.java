@@ -7,6 +7,7 @@ import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.repository.ProjectRepository;
 import academy.mischok.todoapp.repository.UserRepository;
 import academy.mischok.todoapp.service.ProjectService;
+import academy.mischok.todoapp.service.UserService;
 import academy.mischok.todoapp.validation.ProjectValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final ProjectEntityConverter projectEntityConverter;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public ProjectValidation isTitleValid(String title) {
@@ -56,14 +58,14 @@ public class ProjectServiceImpl implements ProjectService {
     public Optional<ProjectDto> updateProject(Long id, ProjectDto projectDto) {
         Optional<ProjectEntity> optionalProjectEntity = projectRepository.findById(id);
         return optionalProjectEntity.map(projectEntity -> {
-            projectEntity.setTitle(projectDto.getTitle());
-            projectEntity.setDescription(projectDto.getDescription());
-            return projectRepository.save(projectEntity);
-        })
+                    projectEntity.setTitle(projectDto.getTitle());
+                    projectEntity.setDescription(projectDto.getDescription());
+                    return projectRepository.save(projectEntity);
+                })
                 .map(projectEntityConverter::convertToDto);
     }
 
-p
+
     @Override
     public ProjectDto findProjectByIdAndUser(Long id, UserEntity user) throws ProjectNotFoundException {
         Optional<ProjectEntity> projectEntity = projectRepository.findByIdAndOwner(id, user);
@@ -74,25 +76,25 @@ p
         }
     }
 
+    @Override
     public void addUserToProject(Long projectId, Long userId) throws ProjectNotFoundException {
         ProjectEntity project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
-
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + projectId));
+        UserEntity user = userService.findUserById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
 
         project.getUsers().add(user);
         projectRepository.save(project);
     }
 
+    @Override
     public void removeUserFromProject(Long projectId, Long userId) throws ProjectNotFoundException {
         ProjectEntity project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + projectId));
+        UserEntity user = userService.findUserById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
 
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        project.getUser().remove(user);
+        project.getUsers().remove(user);
         projectRepository.save(project);
     }
 }

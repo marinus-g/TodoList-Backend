@@ -14,5 +14,5 @@ public interface ToDoRepository extends JpaRepository<ToDoEntity, Long> {
     Optional<ToDoEntity> findByTitle(String title);
     List<ToDoEntity> findByUser(UserEntity user);
     Optional<ToDoEntity> findByIdAndUser(long id, UserEntity user);
-
+    Optional<ToDoEntity> findByTitleAndUser(String title, UserEntity user);
 }

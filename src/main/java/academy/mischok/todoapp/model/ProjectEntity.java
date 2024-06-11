@@ -30,6 +30,12 @@ public class ProjectEntity {
     @Builder.Default
     @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
     private List<ToDoEntity> todo = new ArrayList<>();
-    private Set<UserEntity> users = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "project_users",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<UserEntity> users;
 
 }

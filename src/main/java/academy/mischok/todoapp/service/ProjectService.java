@@ -19,4 +19,6 @@ public interface ProjectService {
     Optional<ProjectDto> updateProject(Long id, ProjectDto projectDto);
 
     ProjectDto findProjectByIdAndUser(Long id, UserEntity user) throws ProjectNotFoundException;
+    void addUserToProject(Long projectId, Long userId) throws ProjectNotFoundException;
+    void removeUserFromProject (Long projectId, Long userId) throws ProjectNotFoundException;
 }

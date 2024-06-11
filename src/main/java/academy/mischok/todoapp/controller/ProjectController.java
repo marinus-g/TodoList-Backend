@@ -50,7 +50,7 @@ public class ProjectController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getProject(@AuthenticationPrincipal UserEntity user, @PathVariable Long id) {
         try {
-            return ResponseEntity.ok((ProjectDto) projectService.findProjectByIdAndUser(id, user));
+            return ResponseEntity.ok(projectService.findProjectByIdAndUser(id, user));
         } catch (ProjectNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
@@ -58,12 +58,11 @@ public class ProjectController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProjectDto> updateProject(@PathVariable Long id, @RequestBody ProjectDto projectDto) {
-        // VALDATIONS..?
         return this.projectService.updateProject(id, projectDto)
-                .map(dto -> ResponseEntity.ok(dto))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
+    @PostMapping("/{projectId}/users/{userId}")
     public ResponseEntity<?> addUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
         try {
             projectService.addUserToProject(projectId, userId);

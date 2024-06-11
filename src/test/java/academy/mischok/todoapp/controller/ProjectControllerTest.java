@@ -236,7 +236,7 @@ public class ProjectControllerTest extends AuthenticatedBaseControllerTest {
 
         mockMvc.perform(delete("/project/" +- 1)
                         .cookie(super.defaultCookie))
-                .andExpect(status().isNotFoundp());
+                .andExpect(status().isNotFound());
 
     }
 }

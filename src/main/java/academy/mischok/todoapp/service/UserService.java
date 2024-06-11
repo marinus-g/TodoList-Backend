@@ -16,7 +16,7 @@ public interface UserService {
 
     Optional<UserEntity> findUserByName(String username);
 
-    Optional<UserEntity> findById(Long id);
+    Optional<UserEntity> findUserById(Long id);
 
     boolean existsByUsername(String username);
 
