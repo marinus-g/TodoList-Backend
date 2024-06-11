@@ -2,7 +2,12 @@ package academy.mischok.todoapp.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
@@ -12,14 +17,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class StudyPlanControllerTest extends AuthenticatedBaseControllerTest {
+@SpringBootTest
+@AutoConfigureMockMvc
+public class StudyPlanControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
+    @WithMockUser(username = "testUser")
     void testCreateValidStudyPlan() throws Exception {
-
-        final ObjectMapper objectMapper = new ObjectMapper();
         String contentAsString = mockMvc.perform(get("/studyplan")
-                        .cookie(super.defaultCookie)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
@@ -28,19 +39,17 @@ public class StudyPlanControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "title": "Test Studyplan",
-                    "start_date": "20-04-2024",
-                    "end_date": "24-04-2024",
+                    "start_date": "2024-04-20",
+                    "end_date": "2024-04-24"
                 }
                 """;
-        mockMvc.perform(post("/project")
+        mockMvc.perform(post("/studyplan")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data)
-                        .cookie(super.defaultCookie)
-                )
+                        .content(data))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andExpect(header().string("Location", containsString("/studyplan/")));
-        mockMvc.perform(get("/studyplan").cookie(super.defaultCookie))
+        mockMvc.perform(get("/studyplan").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(length + 1)));
     }
 
@@ -49,19 +58,16 @@ public class StudyPlanControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "title": "T",
-                    "start_date": "20-04-2024",
-                    "end_date": "24-04-2024",
+                    "start_date": "2024-04-20",
+                    "end_date": "2024-04-24"
                 }
                 """;
 
         mockMvc.perform(post("/studyplan")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data)
-                        .cookie(super.defaultCookie)
-                )
+                        .content(data))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Title too short"));
-
+                .andExpect(jsonPath("$.message").value("Title too short"));
     }
 
     @Test
@@ -69,38 +75,32 @@ public class StudyPlanControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "title": "",
-                    "start_date": "20-04-2024",
-                    "end_date": "24-04-2024",
+                    "start_date": "2024-04-20",
+                    "end_date": "2024-04-24"
                 }
                 """;
 
         mockMvc.perform(post("/studyplan")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data)
-                        .cookie(super.defaultCookie)
-                )
+                        .content(data))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Title should not be empty"));
-
+                .andExpect(jsonPath("$.message").value("Title should not be empty"));
     }
 
     @Test
     void createdStudyPlanWithNoTitle() throws Exception {
         final String data = """
                 {
-                    "start_date": "20-04-2024",
-                    "end_date": "24-04-2024",
+                    "start_date": "2024-04-20",
+                    "end_date": "2024-04-24"
                 }
                 """;
 
         mockMvc.perform(post("/studyplan")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data)
-                        .cookie(super.defaultCookie)
-                )
+                        .content(data))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Title should not be empty"));
-
+                .andExpect(jsonPath("$.message").value("Title should not be empty"));
     }
 
     @Test
@@ -109,18 +109,15 @@ public class StudyPlanControllerTest extends AuthenticatedBaseControllerTest {
                 {
                     "title": "test",
                     "start_date": "15-2020",
-                    "end_date": "12-12-2020",
+                    "end_date": "2020-12-12"
                 }
                 """;
 
         mockMvc.perform(post("/studyplan")
-                        .cookie(super.defaultCookie)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data)
-                )
+                        .content(data))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Invalid Date"));
-
+                .andExpect(jsonPath("$.message").value("Invalid Date"));
     }
 
     @Test
@@ -128,26 +125,47 @@ public class StudyPlanControllerTest extends AuthenticatedBaseControllerTest {
         final String data = """
                 {
                     "title": "test",
-                    "start_date": "15-12-2020",
-                    "end_date": "12-2020",
+                    "start_date": "2020-12-15",
+                    "end_date": "12-2020"
                 }
                 """;
 
         mockMvc.perform(post("/studyplan")
-                        .cookie(super.defaultCookie)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data)
-                )
+                        .content(data))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Invalid Date"));
-
+                .andExpect(jsonPath("$.message").value("Invalid Date"));
     }
 
-    //@Test
+    @Test
     void createdStudyPlanWithNoStartDate() throws Exception {
+        final String data = """
+                {
+                    "title": "test",
+                    "end_date": "2024-04-24"
+                }
+                """;
+
+        mockMvc.perform(post("/studyplan")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(data))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Start date is required"));
     }
 
-    //@Test
+    @Test
     void createdStudyPlanWithNoEndDate() throws Exception {
+        final String data = """
+                {
+                    "title": "test",
+                    "start_date": "2024-04-20"
+                }
+                """;
+
+        mockMvc.perform(post("/studyplan")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(data))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("End date is required"));
     }
 }

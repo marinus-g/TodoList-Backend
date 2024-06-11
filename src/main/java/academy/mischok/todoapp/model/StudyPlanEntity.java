@@ -24,5 +24,9 @@ public class StudyPlanEntity {
     private Date endDate;
     @ManyToOne
     private UserEntity owner;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
 }
+

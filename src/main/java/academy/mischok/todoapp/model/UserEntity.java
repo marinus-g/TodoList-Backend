@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -31,6 +32,9 @@ public class UserEntity implements UserDetails  {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ToDoEntity> todos;
+
+    @OneToMany(mappedBy = "user")
+    private Set<StudyPlanEntity> studyPlans;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

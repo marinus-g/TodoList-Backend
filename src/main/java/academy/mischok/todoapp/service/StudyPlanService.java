@@ -20,3 +20,4 @@ public interface StudyPlanService {
     List<StudyPlanDto> findAllStudyPlans(UserEntity user);
     Optional<StudyPlanDto> findByIdAndUser(UserEntity user, Long id);
 }
+

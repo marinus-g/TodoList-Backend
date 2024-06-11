@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface StudyPlanRepository extends JpaRepository<StudyPlanEntity, Long> {
     boolean existsByTitle(String title);
     Optional<StudyPlanEntity> findByTitle(String title);
-    Optional<StudyPlanEntity> findByIdAndUser(long id, UserEntity user);
+    Optional<StudyPlanEntity> findByIdAndUser(Long id, UserEntity user);
 }
+

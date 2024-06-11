@@ -19,3 +19,4 @@ public class StudyPlanDto {
     private List<Long> todos;
     private Long ownerId;
 }
+
