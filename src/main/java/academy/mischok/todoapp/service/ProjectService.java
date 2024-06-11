@@ -2,8 +2,8 @@ package academy.mischok.todoapp.service;
 
 import academy.mischok.todoapp.dto.ProjectDto;
 import academy.mischok.todoapp.model.UserEntity;
-import academy.mischok.todoapp.service.impl.ProjectNotFoundException;
-import academy.mischok.todoapp.service.impl.UnauthorizedException;
+import academy.mischok.todoapp.exception.ProjectNotFoundException;
+import academy.mischok.todoapp.exception.UnauthorizedException;
 import academy.mischok.todoapp.validation.ProjectValidation;
 
 import java.util.List;

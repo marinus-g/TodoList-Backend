@@ -2,6 +2,8 @@ package academy.mischok.todoapp.service.impl;
 
 import academy.mischok.todoapp.converter.impl.ProjectEntityConverter;
 import academy.mischok.todoapp.dto.ProjectDto;
+import academy.mischok.todoapp.exception.ProjectNotFoundException;
+import academy.mischok.todoapp.exception.UnauthorizedException;
 import academy.mischok.todoapp.model.ProjectEntity;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.repository.ProjectRepository;

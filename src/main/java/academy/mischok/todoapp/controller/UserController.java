@@ -1,14 +1,12 @@
 package academy.mischok.todoapp.controller;
 
 import academy.mischok.todoapp.converter.impl.UserEntityConverter;
-import academy.mischok.todoapp.dto.LoginPasswordDto;
 import academy.mischok.todoapp.dto.RegistrationDto;
 import academy.mischok.todoapp.dto.UserDto;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.repository.UserRepository;
 import academy.mischok.todoapp.service.AuthenticationService;
 import academy.mischok.todoapp.service.UserService;
-import academy.mischok.todoapp.service.impl.UserServiceImpl;
 import academy.mischok.todoapp.validation.UserNameValidation;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +14,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
