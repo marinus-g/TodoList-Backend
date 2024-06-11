@@ -12,9 +12,9 @@ import academy.mischok.todoapp.validation.ProjectValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
@@ -55,6 +55,7 @@ public class ProjectServiceImpl implements ProjectService {
         return List.of();
     }
 
+    @Override
     public Optional<ProjectDto> updateProject(Long id, ProjectDto projectDto) {
         Optional<ProjectEntity> optionalProjectEntity = projectRepository.findById(id);
         return optionalProjectEntity.map(projectEntity -> {
@@ -64,7 +65,6 @@ public class ProjectServiceImpl implements ProjectService {
                 })
                 .map(projectEntityConverter::convertToDto);
     }
-
 
     @Override
     public ProjectDto findProjectByIdAndUser(Long id, UserEntity user) throws ProjectNotFoundException {
@@ -96,5 +96,41 @@ public class ProjectServiceImpl implements ProjectService {
 
         project.getUsers().remove(user);
         projectRepository.save(project);
+    }
+
+    @Override
+    public Optional<ProjectDto> addUserToProject(Long projectId, Long userId, UserEntity requestingUser) throws ProjectNotFoundException, UnauthorizedException {
+        ProjectEntity project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + projectId));
+
+        if (!project.getOwnerId().equals(requestingUser.getId())) {
+            throw new UnauthorizedException("You are not authorized to add users to this project");
+        }
+
+        UserEntity userToAdd = userService.findUserById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+
+        project.getUsers().add(userToAdd);
+        projectRepository.save(project);
+
+        return Optional.of(projectEntityConverter.convertToDto(project));
+    }
+
+    @Override
+    public Optional<ProjectDto> removeUserFromProject(Long projectId, Long userId, UserEntity requestingUser) throws ProjectNotFoundException, UnauthorizedException {
+        ProjectEntity project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + projectId));
+
+        if (!project.getOwnerId().equals(requestingUser.getId())) {
+            throw new UnauthorizedException("You are not authorized to remove users from this project");
+        }
+
+        UserEntity userToRemove = userService.findUserById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+
+        project.getUsers().remove(userToRemove);
+        projectRepository.save(project);
+
+        return Optional.of(projectEntityConverter.convertToDto(project));
     }
 }

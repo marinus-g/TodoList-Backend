@@ -38,4 +38,7 @@ public class ProjectEntity {
     )
     private List<UserEntity> users;
 
+    public Object getOwnerId() {
+        return null;
+    }
 }

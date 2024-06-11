@@ -1,12 +1,12 @@
 package academy.mischok.todoapp.controller;
 
-
 import academy.mischok.todoapp.dto.ProjectDto;
 import academy.mischok.todoapp.model.ProjectEntity;
 import academy.mischok.todoapp.model.UserEntity;
 import academy.mischok.todoapp.repository.ProjectRepository;
 import academy.mischok.todoapp.service.ProjectService;
 import academy.mischok.todoapp.service.impl.ProjectNotFoundException;
+import academy.mischok.todoapp.service.impl.UnauthorizedException;
 import academy.mischok.todoapp.validation.ProjectValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +62,7 @@ public class ProjectController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
     @PostMapping("/{projectId}/users/{userId}")
     public ResponseEntity<?> addUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
         try {
@@ -87,15 +88,40 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-            public ResponseEntity<String> deleteProject(@PathVariable Long id) {
+    public ResponseEntity<String> deleteProject(@PathVariable Long id) {
         ProjectEntity project = projectRepository.findById(id).orElse(null);
 
         if (project != null) {
             projectRepository.delete(project);
-
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/{projectId}/addUser/{userId}")
+    public ResponseEntity<?> addUserToProject(@AuthenticationPrincipal UserEntity requestingUser,
+                                              @PathVariable Long projectId,
+                                              @PathVariable Long userId) {
+        try {
+            return projectService.addUserToProject(projectId, userId, requestingUser)
+                    .map(projectDto -> ResponseEntity.ok().body(projectDto))
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (ProjectNotFoundException | UnauthorizedException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{projectId}/removeUser/{userId}")
+    public ResponseEntity<?> removeUserFromProject(@AuthenticationPrincipal UserEntity requestingUser,
+                                                   @PathVariable Long projectId,
+                                                   @PathVariable Long userId) {
+        try {
+            return projectService.removeUserFromProject(projectId, userId, requestingUser)
+                    .map(projectDto -> ResponseEntity.ok().body(projectDto))
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (ProjectNotFoundException | UnauthorizedException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
