@@ -26,8 +26,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Optional<UserEntity> findById(Long id) {
-        return userRepository.findById(id);
+    public Optional<UserEntity> findUserById(Long id) {
+        return userRepository.findUserById(id);
     }
 
     @Override
