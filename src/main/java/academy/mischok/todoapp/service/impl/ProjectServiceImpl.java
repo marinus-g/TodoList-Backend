@@ -59,9 +59,8 @@ public class ProjectServiceImpl implements ProjectService {
         } else {
             projects = projectRepository.findAll();
         }
-        List<ProjectDto> collect = projects.stream()
+        return projects.stream()
                 .map(projectEntityConverter::convertToDto)
                 .collect(Collectors.toList());
-        return collect;
     }
 }

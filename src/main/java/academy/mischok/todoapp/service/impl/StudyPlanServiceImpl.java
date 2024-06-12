@@ -64,12 +64,17 @@ public class StudyPlanServiceImpl implements StudyPlanService {
     @Override
     public Optional<StudyPlanDto> createStudyPlan(UserEntity user,StudyPlanDto studyPlanDto) {
         return Optional.ofNullable(studyPlanDto)
-                .map(studyPlanEntityConverter::convertToEntity)
-                .stream()
-                .peek(studyPlanEntity -> studyPlanEntity.setOwner(user))
+                .map(studyPlanDto1 -> {
+                    return StudyPlanEntity
+                            .builder()
+                            .owner(user)
+                            .title(studyPlanDto.getTitle())
+                            .startDate(studyPlanDto.getStartDate() == null ? null : new java.sql.Date(dateConverter.convertToEntity(studyPlanDto.getStartDate()).getTime()))
+                            .endDate(studyPlanDto.getEndDate() == null ? null : new java.sql.Date(dateConverter.convertToEntity(studyPlanDto.getEndDate()).getTime()))
+                            .build();
+                })
                 .map(studyPlanRepository::save)
-                .map(studyPlanEntityConverter::convertToDto)
-                .findFirst();
+                .map(studyPlanEntityConverter::convertToDto);
     }
 
     @Override

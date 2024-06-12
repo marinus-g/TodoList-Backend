@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/study-plan")
+@RequestMapping("/studyplan")
 @RequiredArgsConstructor
 public class StudyPlanController {
 
@@ -31,7 +31,7 @@ public class StudyPlanController {
             return ResponseEntity.badRequest().body(validation.message());
         }
         return studyPlanService.createStudyPlan(user, studyPlanDto)
-                .map(dto -> ResponseEntity.created(URI.create("/study-plan/" + dto.getId())).build())
+                .map(dto -> ResponseEntity.created(URI.create("/studyplan/" + dto.getId())).build())
                 .orElse(ResponseEntity.noContent().build());
     }
 

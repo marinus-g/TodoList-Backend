@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class StudyPlanControllerTest {
+public class StudyPlanControllerTest extends AuthenticatedBaseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,7 +31,8 @@ public class StudyPlanControllerTest {
     @WithMockUser(username = "testUser")
     void testCreateValidStudyPlan() throws Exception {
         String contentAsString = mockMvc.perform(get("/studyplan")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(super.defaultCookie))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         List<?> jsonArray = objectMapper.readValue(contentAsString, List.class);
@@ -65,9 +66,9 @@ public class StudyPlanControllerTest {
 
         mockMvc.perform(post("/studyplan")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data))
+                        .cookie(super.defaultCookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Title too short"));
+                .andExpect(jsonPath("$").value("Title too short"));
     }
 
     @Test
@@ -82,9 +83,9 @@ public class StudyPlanControllerTest {
 
         mockMvc.perform(post("/studyplan")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data))
+                        .cookie(super.defaultCookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Title should not be empty"));
+                .andExpect(jsonPath("$").value("Title should not be empty"));
     }
 
     @Test
@@ -98,9 +99,9 @@ public class StudyPlanControllerTest {
 
         mockMvc.perform(post("/studyplan")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data))
+                        .cookie(super.defaultCookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Title should not be empty"));
+                .andExpect(jsonPath("$").value("Title should not be empty"));
     }
 
     @Test
@@ -115,9 +116,9 @@ public class StudyPlanControllerTest {
 
         mockMvc.perform(post("/studyplan")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data))
+                        .cookie(super.defaultCookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Invalid Date"));
+                .andExpect(jsonPath("$").value("Invalid Date"));
     }
 
     @Test
@@ -132,9 +133,9 @@ public class StudyPlanControllerTest {
 
         mockMvc.perform(post("/studyplan")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data))
+                        .cookie(super.defaultCookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Invalid Date"));
+                .andExpect(jsonPath("$").value("Invalid Date"));
     }
 
     @Test
@@ -148,9 +149,9 @@ public class StudyPlanControllerTest {
 
         mockMvc.perform(post("/studyplan")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data))
+                        .cookie(super.defaultCookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Start date is required"));
+                .andExpect(jsonPath("$").value("Start date is required"));
     }
 
     @Test
@@ -164,8 +165,8 @@ public class StudyPlanControllerTest {
 
         mockMvc.perform(post("/studyplan")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(data))
+                        .cookie(super.defaultCookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("End date is required"));
+                .andExpect(jsonPath("$").value("End date is required"));
     }
 }
