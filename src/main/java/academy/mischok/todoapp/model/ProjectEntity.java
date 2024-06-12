@@ -3,6 +3,9 @@ package academy.mischok.todoapp.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,5 +24,7 @@ public class ProjectEntity {
     private String description;
     @ManyToOne
     private UserEntity owner;
+    @ManyToMany(mappedBy = "projects")
+    private Set<UserEntity>users = new HashSet<>();
 
 }

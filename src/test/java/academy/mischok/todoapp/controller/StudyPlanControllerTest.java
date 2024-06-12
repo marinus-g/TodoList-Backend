@@ -85,7 +85,7 @@ public class StudyPlanControllerTest extends AuthenticatedBaseControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(super.defaultCookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Title should not be empty"));
+                .andExpect(jsonPath("$.message").value("Title should not be empty"));
     }
 
     @Test

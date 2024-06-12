@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,14 +28,22 @@ public class UserEntity implements UserDetails  {
     private String email;
     @Column(name = "password")
     private String password;
-    @OneToMany
-    private List<ProjectEntity> projects;
+
+    @ManyToMany
+    @JoinTable(name = "userProjectEntity",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "project_id"))
+    private Set<ProjectEntity> projects = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<StudyPlanEntity> owner;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ToDoEntity> todos;
 
     @OneToMany(mappedBy = "user")
-    private Set<StudyPlanEntity> studyPlans;
+    private List<StudyPlanEntity> studyPlan;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

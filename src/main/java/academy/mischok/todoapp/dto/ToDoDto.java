@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.*;
 
+import java.util.Set;
+
 @Data
 @Builder
 @Getter
@@ -24,4 +26,7 @@ public class ToDoDto {
     private String endDate;
     @JsonProperty("status")
     private String status;
+    @JsonProperty("owner")
+    private Long owner;
+    private Set<StudyPlanDto> studyplans;
 }

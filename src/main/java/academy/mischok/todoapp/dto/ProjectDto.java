@@ -1,9 +1,11 @@
 package academy.mischok.todoapp.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -13,10 +15,14 @@ import java.util.List;
 @NoArgsConstructor
 public class ProjectDto {
 
+    @JsonProperty("id")
     private Long id;
+    @JsonProperty("title")
     private String title;
+    @JsonProperty("description")
     private String description;
+    @JsonProperty("owner_id")
     private Long ownerId;
-    private List<Long> todos;
+    private Set<UserDto> users;
 
 }

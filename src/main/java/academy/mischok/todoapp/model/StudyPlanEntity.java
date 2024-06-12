@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.util.HashSet;
+import  java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,11 +25,15 @@ public class StudyPlanEntity {
     private Date startDate;
     @Column(name = "study_plan_end_date")
     private Date endDate;
+
     @ManyToOne
     private UserEntity owner;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    @ManyToMany(mappedBy = "studyplans")
+    private Set<ToDoEntity> todos = new HashSet<>();
 }
 

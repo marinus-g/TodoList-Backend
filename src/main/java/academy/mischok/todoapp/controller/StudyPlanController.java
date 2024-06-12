@@ -6,6 +6,7 @@ import academy.mischok.todoapp.service.StudyPlanService;
 import academy.mischok.todoapp.validation.StudyPlanValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,16 +25,26 @@ public class StudyPlanController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+
     public ResponseEntity<?> createStudyPlan(@AuthenticationPrincipal UserEntity user,
                                              @Valid @RequestBody StudyPlanDto studyPlanDto) {
+        if (studyPlanDto == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Study plan should not be empty");
+        }
+        if (studyPlanDto.getTitle() == null || studyPlanDto.getTitle().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Title should not be empty");
+        }
+
         StudyPlanValidation validation = studyPlanService.isStudyPlanValid(studyPlanDto);
         if (!validation.isValid()) {
             return ResponseEntity.badRequest().body(validation.message());
         }
+
         return studyPlanService.createStudyPlan(user, studyPlanDto)
                 .map(dto -> ResponseEntity.created(URI.create("/studyplan/" + dto.getId())).build())
                 .orElse(ResponseEntity.noContent().build());
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateStudyPlan(@AuthenticationPrincipal UserEntity user,

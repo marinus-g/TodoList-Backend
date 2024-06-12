@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,9 +18,8 @@ public class ToDoEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+
+
     @Column(name = "title")
     private java.lang.String title;
     @Column(name = "description", columnDefinition = "TEXT")
@@ -31,4 +32,15 @@ public class ToDoEntity {
     @Column(name = "status")
     private Status status;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
+    @ManyToMany
+    @JoinTable(
+            name = "TodoStudyplanTimeframeEntity",
+            joinColumns = @JoinColumn(name = "todo_id"),
+            inverseJoinColumns = @JoinColumn(name = "studyplan_id")
+    )
+    private Set<StudyPlanEntity> studyplans = new HashSet<>();
 }
